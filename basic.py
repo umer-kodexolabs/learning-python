@@ -1,3 +1,5 @@
+from functools import reduce
+
 # Math Operators
 print((2 + 3) * 6)  # 30
 print(2 + 3 * 6)  # 20
@@ -72,3 +74,34 @@ print(f"My name is {name} and I am {age} years old.")
 # while ----->	To create a while loop
 # with ----->	Used to simplify exception handling
 # yield ----->	To return a list of values from a generator
+
+
+
+
+# Print even no from 0-20
+def find_even_num(num: int):
+    even = []
+    for value in range(num+1):
+        if value%2==0:
+            even.append(value)
+    return even
+
+
+print(find_even_num(20))
+
+# sum of all numbers
+def sum_all_nums(*nums):
+    total  = 0
+    for n in nums:
+        total +=n
+    return total
+
+print(sum_all_nums(2,4,5,6,7,8,3,1))
+
+
+# Use Reduce to find of all nums
+def sum_all_nums_with_reduce(numbers:list):
+    total= reduce(lambda acc, current: acc+current, numbers,0)
+    return total
+
+print(sum_all_nums_with_reduce([2,4,5,6,7,8,3,1]))
