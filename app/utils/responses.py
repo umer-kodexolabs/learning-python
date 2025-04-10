@@ -1,17 +1,17 @@
-from typing import Generic, Optional, TypeVar, Any
-from pydantic import BaseModel
-from http import HTTPStatus
-
-T = TypeVar("T")
+from fastapi import status
+from fastapi.responses import JSONResponse
+from typing import Any
 
 
-class BaseResponse(BaseModel, Generic[T]):
-    message: str
-    status_code: HTTPStatus = HTTPStatus.OK
-    data: Optional[T] = None
+def success_response(data: Any, status_code: int, message: str = "Success"):
+    return JSONResponse(
+        content={"data": data, "message": message, "status_code": status_code},
+        status_code=status_code,
+    )
 
 
-class ErrorResponse(BaseModel):
-    message: str
-    status_code: HTTPStatus = HTTPStatus.OK
-    error: Optional[Any] = None
+def error_response(message: str, status_code: int, error: Any = None):
+    return JSONResponse(
+        content={"error": error, "message": message, "status_code": status_code},
+        status_code=status_code,
+    )

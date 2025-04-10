@@ -37,3 +37,19 @@ class Book(BaseModel):
     currency: Optional[str] = "USD"
     tags: Optional[List[str]] = []
     edition: Optional[str] = None
+
+
+class UpdateBook(BaseModel):
+    title: Optional[str] = None
+    desc: Optional[str] = None
+    genre: Optional[Genre] = None
+    author: Optional[str] = None
+    publisher: Optional[str] = None
+    published_date: Optional[str] = None
+    page_count: Optional[int] = None
+    language: Optional[Language] = None
+    average_rating: Optional[float] = None
+    price: Optional[float] = None
+    currency: Optional[str] = None
+    tags: Optional[List[str]] = None
+    edition: Optional[str] = None
