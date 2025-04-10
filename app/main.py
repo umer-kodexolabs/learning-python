@@ -1,8 +1,16 @@
 from fastapi import FastAPI
-# from .routes1 import router
 from app.routers.book_router import router as book
+from app.config.db import connect_to_db, close_db_connection
 
 app = FastAPI(title="FastAPI CRUD Example")
 
-# app.include_router(router)
+
+async def lifespan():
+    # Startup: Connect to the database
+    await connect_to_db()
+    yield  # FastAPI will wait here until the app shuts down
+    # Shutdown: Close the database connection
+    await close_db_connection()
+
+
 app.include_router(book)

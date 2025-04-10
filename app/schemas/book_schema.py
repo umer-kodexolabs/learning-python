@@ -1,10 +1,10 @@
 from pydantic import BaseModel
-from typing import List,Optional
+from typing import List, Optional
 from enum import Enum
 
 
-class Language(str,Enum):
-    ENGLISH = "English"    
+class Language(str, Enum):
+    ENGLISH = "English"
     SPANISH = "Spanish"
     FRENCH = "French"
     GERMAN = "German"
@@ -22,8 +22,8 @@ class Genre(str, Enum):
     HISTORY = "History"
     SELF_HELP = "Self Help"
 
+
 class Book(BaseModel):
-    id: int
     title: str
     desc: str
     genre: Genre
@@ -35,7 +35,5 @@ class Book(BaseModel):
     average_rating: Optional[float] = 0
     price: float
     currency: Optional[str] = "USD"
-    tags: Optional[List[str]]  = []
+    tags: Optional[List[str]] = []
     edition: Optional[str] = None
-
- 
