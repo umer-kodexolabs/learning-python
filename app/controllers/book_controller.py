@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status, Response
+from fastapi import HTTPException, status, Response, Request
 from app.schemas.book_schema import Book, Genre, Language
 from app.models import book_model
 from fastapi.responses import JSONResponse
@@ -9,6 +9,7 @@ from fastapi.encoders import jsonable_encoder
 from app.utils import convert_to_serializable
 from datetime import datetime, timezone
 from bson import ObjectId
+import json
 
 
 async def add_book(
@@ -154,6 +155,53 @@ async def update_book(book_id, payload, db):
         )
 
     except Exception as err:
+        return error_response(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message="Internal server error",
+            error=str(err),
+        )
+
+
+def test_function(limit, page, is_new, req):
+    try:
+        json_body = req.json()
+        print("req", req)
+        print("page", page)
+        print("is_new", is_new)
+        ab = {"limit": type(limit), "page": type(page), "is_new": type(is_new)}
+
+        obj = {limit, page, is_new}
+
+        print("Query params1...", (ab))
+        if limit is not None:
+            print(f"We have limit: {limit}")
+
+        if page is not None:
+            print(f"We have page: {page}")
+
+        # data = {page, limit}
+        data = {
+            "page": page,
+            "limit": limit,
+            "method": req.method,
+            "url": str(req.url),
+            "headers": dict(req.headers),
+            "query_params": dict(req.query_params),
+            "client": req.client.host if req.client else None,
+        }
+
+        response = success_response(
+            status_code=status.HTTP_200_OK, data=data, message="Here is your response"
+        )
+        response.set_cookie(
+            key="token",
+            value="123",
+        )
+
+        return response
+
+    except Exception as err:
+        print("Errro", err)
         return error_response(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             message="Internal server error",
