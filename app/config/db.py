@@ -5,6 +5,10 @@ client = AsyncIOMotorClient(settings.database_client)
 db = client[settings.database_name]
 
 
+async def get_db() -> AsyncIOMotorClient:
+    return db
+
+
 async def connect_to_db():
     """Connect to the database and test the connection."""
 

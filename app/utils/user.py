@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, Request, status
 from app.utils import error_response
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config.db import connect_to_db
@@ -9,16 +9,13 @@ from app.utils import convert_to_serializable, decode_token
 async def get_token(
     request: Request,
 ):
-    print("I  aaaaaaaaaaaa")
-    # if token:
-    #     return token
 
     token_from_cookies = request.cookies.get("access_token")
 
     if not token_from_cookies:
         raise HTTPException(
             status_code=401,
-            detail="Not authenticated222",
+            detail="Not authenticated",
         )
 
     return token_from_cookies
@@ -28,13 +25,12 @@ async def get_current_user(
     token: str = Depends(get_token), db: AsyncIOMotorClient = Depends(connect_to_db)
 ):
     try:
-        print("I am here")
         id = decode_token(token, "access").get("_id")
 
         if not id:
             raise HTTPException(
                 status_code=401,
-                detail="Not authenticated2",
+                detail="Not authenticated",
             )
 
         user = await db.users.find_one({"_id": ObjectId(id)}, {"password": 0})
@@ -42,7 +38,7 @@ async def get_current_user(
         if user is None or not user.get("is_active"):
             raise HTTPException(
                 status_code=401,
-                detail="Not authenticated22",
+                detail="Not authenticated",
             )
 
         return convert_to_serializable(user)

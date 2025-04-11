@@ -12,7 +12,7 @@ def success_response(
     )
 
 
-def error_response(message: str, status_code: status, error: Any = None):
+def error_response(message: str, status_code: int, error: Any = None):
     return JSONResponse(
         content={"error": error, "message": message, "status_code": status_code},
         status_code=status_code,
