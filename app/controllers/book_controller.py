@@ -9,7 +9,6 @@ from fastapi.encoders import jsonable_encoder
 from app.utils import convert_to_serializable
 from datetime import datetime, timezone
 from bson import ObjectId
-import json
 
 
 async def add_book(
