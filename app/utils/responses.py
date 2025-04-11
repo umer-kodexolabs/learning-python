@@ -4,7 +4,7 @@ from typing import Any
 
 
 def success_response(
-    data: Any, status_code: status = status.HTTP_200_OK, message: str = "Success"
+    data: Any = None, status_code: status = status.HTTP_200_OK, message: str = "Success"
 ):
     return JSONResponse(
         content={"data": data, "message": message, "status_code": status_code},

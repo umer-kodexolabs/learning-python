@@ -1,16 +1,14 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config.settings import settings
 
-client = None
-db = None
+client = AsyncIOMotorClient(settings.database_client)
+db = client[settings.database_name]
 
 
 async def connect_to_db():
     """Connect to the database and test the connection."""
-    global client, db
+
     try:
-        client = AsyncIOMotorClient(settings.database_client)
-        db = client[settings.database_name]
 
         # Test the connection with a ping command
         await db.command("ping")

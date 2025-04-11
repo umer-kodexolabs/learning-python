@@ -73,11 +73,15 @@ async def login_user(user: LoginSchema, db: AsyncIOMotorClient):
                 error="Invalid credentials",
             )
         user = convert_to_serializable(existing_user)
-        access_token = create_access_token(data={"_id": str(user._id)})
-        refresh_token = create_refresh_token(data={"_id": str(user._id)})
+        user_id = user.get("_id")
+        access_token = create_access_token(data={"_id": user_id})
+        refresh_token = create_refresh_token(data={"_id": user_id})
+
+        print("I am here", access_token)
+        print("I am here", refresh_token)
 
         await db.users.update_one(
-            {"_id": user._id},
+            {"_id": ObjectId(user_id)},
             {
                 "$set": {
                     "refresh_token": refresh_token,
@@ -88,8 +92,11 @@ async def login_user(user: LoginSchema, db: AsyncIOMotorClient):
             },
         )
 
+        user.pop("password", None)
         response = success_response(
-            status_code=status.HTTP_200_OK, message="Login successful", data=user
+            status_code=status.HTTP_200_OK,
+            message="Login successful",
+            data=user,
         )
         response.set_cookie(
             key="refresh_token",
@@ -106,6 +113,8 @@ async def login_user(user: LoginSchema, db: AsyncIOMotorClient):
             secure=True,
         )
 
+        return response
+
     except Exception as err:
         return error_response(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -118,6 +127,7 @@ async def refresh_user_token(request: Request, db: AsyncIOMotorClient):
     try:
         # get the refresh token from cookies
         refresh_token = request.cookies.get("refresh_token")
+        print("refresh token", refresh_token)
         if not refresh_token:
             return error_response(
                 status_code=status.HTTP_401_UNAUTHORIZED,

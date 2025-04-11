@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from bson import ObjectId
 
 
-async def get_user_by_email(user):
+async def get_user(user):
     try:
         return success_response(
             message="User fetched successfully",
